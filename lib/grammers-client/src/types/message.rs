@@ -19,6 +19,7 @@ use std::fmt;
 use std::io;
 use std::path::Path;
 use std::sync::Arc;
+use tl::types::MessageReplies;
 use types::Chat;
 
 /// Represents a Telegram message, which includes text messages, messages with media, and service
@@ -372,6 +373,16 @@ impl Message {
             Some(replies) => {
                 let tl::enums::MessageReplies::Replies(replies) = replies;
                 Some(replies.replies)
+            }
+        }
+    }
+
+    pub fn replies(&self) -> Option<&MessageReplies> {
+        match &self.msg.replies {
+            None => None,
+            Some(replies) => {
+                let tl::enums::MessageReplies::Replies(replies) = replies;
+                Some(replies)
             }
         }
     }

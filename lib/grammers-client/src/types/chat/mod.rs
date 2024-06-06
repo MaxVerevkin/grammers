@@ -102,6 +102,19 @@ impl Chat {
         }
     }
 
+    pub fn migrated(&self) -> bool {
+        match self {
+            Self::Group(chat) => match &chat.0 {
+                tl::enums::Chat::Chat(chat) => chat.migrated_to.is_some(),
+                tl::enums::Chat::Empty(_)
+                | tl::enums::Chat::Forbidden(_)
+                | tl::enums::Chat::Channel(_)
+                | tl::enums::Chat::ChannelForbidden(_) => false,
+            },
+            Self::User(_) | Self::Channel(_) => false,
+        }
+    }
+
     pub(crate) fn unpack(packed: PackedChat) -> Self {
         match packed.ty {
             PackedType::User => {

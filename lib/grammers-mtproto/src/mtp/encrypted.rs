@@ -12,7 +12,7 @@ use crate::{manual_tl, MsgId};
 use getrandom::getrandom;
 use grammers_crypto::{decrypt_data_v2, encrypt_data_v2, AuthKey, RingBuffer};
 use grammers_tl_types::{self as tl, Cursor, Deserializable, Identifiable, Serializable};
-use log::info;
+use log::{debug, info};
 use std::mem;
 use std::time::{Instant, SystemTime, UNIX_EPOCH};
 
@@ -239,7 +239,7 @@ impl Encrypted {
             //
             // So salts are only requested once we have a valid salt to reduce the chances of this happening.
             if self.salts.len() == 1 {
-                info!("only one future salt remaining; asking for more salts");
+                debug!("only one future salt remaining; asking for more salts");
             }
             let body = tl::functions::GetFutureSalts {
                 num: NUM_FUTURE_SALTS,
@@ -899,7 +899,7 @@ impl Encrypted {
         self.start_salt_time = Some((salts.now, Instant::now()));
         self.salts = salts.salts.0;
         self.salts.sort_by_key(|salt| -salt.valid_since);
-        info!("got {} future salts", self.salts.len());
+        debug!("got {} future salts", self.salts.len());
 
         Ok(())
     }
