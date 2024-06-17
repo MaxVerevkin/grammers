@@ -34,7 +34,7 @@ pub enum Update {
     /// **NOTE**: the library can split raw updates into actual `Update`
     /// variants so use this only as the workaround when such variant is not
     /// available yet.
-    Raw(tl::enums::Update),
+    Raw(tl::enums::Update, Arc<ChatMap>),
 }
 
 impl Update {
@@ -85,7 +85,7 @@ impl Update {
             }
 
             // Raw
-            update => Some(Self::Raw(update)),
+            update => Some(Self::Raw(update, Arc::clone(chats))),
         }
     }
 }
