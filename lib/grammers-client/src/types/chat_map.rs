@@ -6,6 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 use crate::types::{Chat, User};
+use core::fmt;
 use grammers_tl_types as tl;
 use std::collections::HashMap;
 use std::sync::Arc;
@@ -37,6 +38,12 @@ impl From<&tl::enums::Peer> for Peer {
 /// save those separate vectors in a single place and query them by using a `Peer`.
 pub struct ChatMap {
     map: HashMap<Peer, Chat>,
+}
+
+impl fmt::Debug for ChatMap {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("ChatMap").finish_non_exhaustive()
+    }
 }
 
 impl ChatMap {
